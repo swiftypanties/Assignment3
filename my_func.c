@@ -29,8 +29,7 @@ void buildWord(){
 	char input;
 	int i=0;
 	input = getchar();
-	while(input != ' ' && input != '\n' && input != '\t')
-	{
+	while(input != ' ' && input != '\n' && input != '\t'){
 		word[i]= input;
 		i++;
 		input = getchar();
@@ -45,14 +44,13 @@ void buildText(){
     char input;
 	int i=0;
 	input = getchar();
-	while(input != '~')
-	{
+	while(input != '~'){
 		text[i]= input;
 		i++;
 		input = getchar();
 	}
 	text[i]='\0';
-    printf("%s", text);
+    //printf("%s", text);
 }
 
 void gematria(){
