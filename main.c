@@ -8,7 +8,7 @@
 int main(){
     buildWord();
     buildText();
-    anagram();
+    gematria();
 
 
 

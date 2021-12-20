@@ -55,8 +55,7 @@ void buildText(){
     printf("%s", text);
 }
 
-void anagram(){
-
+void gematria(){
 	int sum=wordGemCalc(word);
     //printf("%d\n", sum);
     int tempSum=0;
@@ -72,8 +71,7 @@ void anagram(){
 			else if(text[j]>=97 && text[j]<=122){
                 tempSum += (text[j]-97)+1;
             }	
-			else if(tempSum == 0){break;}
-            // in case of 
+			else if(tempSum == 0){break;} 
 			j++;	
 		}
 
@@ -91,5 +89,10 @@ void anagram(){
 	answer[ansCounter-1]='\0';
     printf("Gematria Sequences: ");
 	printf("%s\n", answer);
+}
+
+void anagram(){
+
+
 
 }
