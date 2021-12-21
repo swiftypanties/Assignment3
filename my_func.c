@@ -110,87 +110,72 @@ void gematria(){
 }
 
 void anagram(){
-    char tempWord[TXT] ={'\0'}, tempWordCopy[TXT]={'\0'}, localWord[WORD]={'\0'}, answer[TXT]={'\0'};
+    char tempWord[TXT] ={'\0'}, tempWordCopy[TXT]={'\0'}, sorted_word[WORD]={'\0'}, answer[TXT]={'\0'};
 
     for(int i=0; word[i]!= '\0'; i++){
-        localWord[i]=word[i];
+        sorted_word[i]=word[i];
     }
 
-    sort(localWord);
+    sort(sorted_word);
 
-    int wordC=0, index=0, j=0, ans=0;
+    int wordC=0, index=0, j=0, i=0, ans=0;
 
-    for(int i=0; text[i]!='\0'; i++){
+    while(text[i]!='\0'){
         while(text[j]!='\0'){
 
             if(text[j]==' '){
-
-                if(index>0){
-
-                    tempWord[index++]=' ';
-                    j++;
-                }
-                    // wordC=0;
-                    // index=0;
-                    // int n=0;
-                    // while(tempWord[n]!='\0'){
-                    //     tempWord[n]='\0';
-                    //     n++
-                    // }
-                    // j=i+1;
+                tempWord[index]=' ';
+                index++;
+                j++;
             }
-            else if(strchr(word, text[j])){
-                //if the letter is in the word we insert in the temporary word
+            else if(wordC<strlen(word)){
                 tempWord[index]=text[j];
                 wordC+=1;
                 index+=1;
-                if(wordC==strlen(word) && isMinimal(tempWord)){
+                j++;
 
-                    for(int n=0; tempWord[n]!='\0'; n++){
-                        tempWordCopy[n]=tempWord[n];
+                if(wordC==strlen(word)){
+
+                    int boolean1=1, boolean2=1;
+                    boolean2= isMinimal(tempWord);
+                    int n=0, ind=0;
+                    while(tempWord[n]!='\0'){
+                        if(tempWord[n]!=' '){
+                            tempWordCopy[ind++]=tempWord[n];
+                        }
+                        n++;
                     }
 
                     sort(tempWordCopy);
-                    int boolean =1;
-
-                    for(int n=0; n<strlen(word); n++){
-                        if(localWord[n]!=tempWordCopy[n]){
-                            int boolean=0;
-                            break;
+                    for(n=0; n<strlen(word); n++){
+                            if(sorted_word[n]!=tempWordCopy[n]){
+                                boolean1=0;
+                                break;
+                            }
                         }
-                    }
 
-                    if(boolean==1){//insert to answer
-                        for(int n=0; tempWord[n]!='\0'; n++){
+                    if((boolean1==1) && (boolean2==1)){ //insert to answer
+                        for(n=0; tempWord[n]!='\0'; n++){
                             answer[ans++] = tempWord[n];
                         }
-                        answer[ans]='~';
+                        answer[ans++]='~';
                     }
 
                     wordC=0;
                     index=0;
-                    int n=0;
-                    while(tempWord[n]!='\0'){
-                        tempWord[n]='\0';
-                        n++;
+                    for(int k=0; k<TXT; k++){
+                        tempWord[k]='\0';
+                        tempWordCopy[k]='\0';
                     }
+                    i++;
+                    j=i;
                 }
-            }
-            else{
-                wordC=0;
-                index=0;
-                int n=0;
-                while(tempWord[n]!='\0'){
-                    tempWord[n]='\0';
-                    n++;
-                }
-                i++;
-                j++;
             }
             
         }
+        i++;
     }
     answer[ans-1]='\0';
-    printf("Anagram Sequences: ");
-	printf("%s\n", answer);
+    printf("Anagram Sequence: ");
+	printf("%s", answer);
 }
