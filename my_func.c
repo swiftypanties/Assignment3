@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 #define TXT 1024
 #define WORD 30
 
@@ -52,13 +53,13 @@ void buildText(){
 	text[i]='\0';
     //printf("%s", text);
 }
+
 int isMinimal(char text[TXT]){
     if((text[0]==' ') || (text[strlen(text)-1] ==' ')){
         return 0;
     }
     return 1;
 }
-
 //swap code inspired from class
 void swap(char *a, char *b ){
     char temp = *a;
@@ -80,7 +81,7 @@ void gematria(){
     int i=0, j=0, ansCounter=0, tempCounter=0;
 	char answer[TXT];
 
-	for(i; text[i]!='\0'; i++){
+	for(i=0; text[i]!='\0'; i++){
 	// o(n*(n-1)/2)=o(n^2) running on each letter (n-1) times to check all possibilities
 		while(tempSum < sum && text[j] != '\0'){
 			if(text[j]>=65 && text[j]<=90){
@@ -107,6 +108,145 @@ void gematria(){
 	answer[ansCounter-1]='\0';
     printf("Gematria Sequences: ");
 	printf("%s\n", answer);
+}
+
+void atbash(){
+    // lines 115-135 are to translate the word to Atbash
+    char atbashWord[WORD]= {'\0'};
+    char atbashWordReversed[WORD]={'\0'};
+    char tempC;
+    int i=0, j=0, k=strlen(word)-1, temp=0;
+        //translate word to atbash
+    while(word[i]!='\0'){
+		if(word[i]>=65 && word[i]<=90){// upercase
+            temp = 155-word[i];
+            tempC=(char)temp;
+            atbashWord[j++]= tempC;
+            atbashWordReversed[k--]=tempC;
+            
+        }
+		else if(word[i]>=97 && word[i]<=122){// lower case
+            temp = 219-word[i];
+            tempC=(char)temp;
+            atbashWord[j++]= tempC;
+            atbashWordReversed[k--]=tempC;
+            
+        }else{
+            atbashWord[j++]=word[i];
+            atbashWordReversed[k--]=word[i];
+        }
+        i++;
+	}
+    
+
+    //from here we will look for the occurence of the atbash word in the text
+
+    i=0, j=0, k=0;
+    int AC=0, ARC=0, tempWL=0, tempIndex=0, ans=0;
+
+    char tempWord[WORD]={'\0'};
+    char answer[TXT]={'\0'};
+
+
+    while(text[i]!='\0'){
+
+        if(text[i]== atbashWord[0] || text[i]== atbashWordReversed[0]){
+            //while for the normal atbash
+            j=i;
+            while(text[j]!='\0'){
+                if(text[j]==' '){
+                    tempWord[tempIndex]=' ';
+                    j++;
+                    tempIndex++;
+                }
+                else if((text[j]==atbashWord[AC]) && (tempWL<strlen(atbashWord))){
+                    tempWord[tempIndex]=text[j];
+                    tempIndex++;
+                    tempWL++;
+                    AC++;
+                    j++;
+                    //insert answer
+                    if(tempWL==strlen(atbashWord)){
+                        int n=0;
+                        while(tempWord[n]!='\0'){
+                            answer[ans++]=tempWord[n];
+                            tempWord[n++]='\0';
+                        }
+                        answer[ans++]='~';
+                        tempIndex=0;
+                        tempWL=0;
+                        AC=0;
+                        j=0;
+                        break;
+                        // reset all values and continue to next
+                    }
+                }
+                else{
+                    //not a correct symbol/letter we need to reset and try Reversed Version
+                    for(int n=0; tempWord[n]!='\0'; n++){
+                        tempWord[n]='\0';
+                    }
+                    tempIndex=0;
+                    tempWL=0;
+                    AC=0;
+                    j=0;
+                    break;
+                }
+            }
+
+        }
+        if(text[i]== atbashWord[0] || text[i]== atbashWordReversed[0]){
+
+            //checking reversed version
+            j=i;
+            while(text[j]!='\0'){
+                if(text[j]==' '){
+                    tempWord[tempIndex]=' ';
+                    j++;
+                    tempIndex++;
+                }
+                else if((text[j]==atbashWordReversed[ARC]) && (tempWL<strlen(atbashWordReversed))){
+                    tempWord[tempIndex]=text[j];
+                    tempIndex++;
+                    tempWL++;
+                    ARC++;
+                    j++;
+                    //insert answer
+                    if(tempWL==strlen(atbashWordReversed)){
+                        int n=0;
+                        while(tempWord[n]!='\0'){
+                            answer[ans++]=tempWord[n];
+                            tempWord[n++]='\0';
+                        }
+                        answer[ans++]='~';
+                        tempIndex=0;
+                        tempWL=0;
+                        AC=0;
+                        j=0;
+                        break;
+                        // reset all values and continue to next
+                    }
+                }
+                else{
+                    //not a correct symbol/letter we need to reset and try Reversed Version
+                    for(int n=0; tempWord[n]!='\0'; n++){
+                        tempWord[n]='\0';
+                    }
+                    tempIndex=0;
+                    tempWL=0;
+                    AC=0;
+                    j=0;
+                    break;
+                }
+            }
+
+        }
+        i++;
+    }
+    answer[ans-1]='\0';
+    printf("Atbash Sequences: ");
+    printf("%s\n", answer);
+    
 }
 
 void anagram(){
