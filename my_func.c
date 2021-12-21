@@ -316,6 +316,6 @@ void anagram(){
         i++;
     }
     answer[ans-1]='\0';
-    printf("Anagram Sequence: ");
+    printf("Anagram Sequences: ");
 	printf("%s", answer);
 }
